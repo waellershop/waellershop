@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Wäller Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Favicon & iPhone Icon -->
+  <link rel="icon" href="logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="logo.png" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #020617;
+      color: #e5e7eb;
+      line-height: 1.5;
+    }
+
+    header {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(15, 23, 42, 0.96);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-wrap img {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 0.3rem;
+    }
+
+    p.lead {
+      color: #cbd5f5;
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .product-card {
+      background: #020617;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148,163,184,0.4);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      border-color: #22c55e;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.45);
+    }
+
+    .product-main-img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      display: block;
+      max-height: 340px;
+    }
+
+    .product-body {
+      padding: 0.8rem 0.9rem 0.9rem;
+    }
+
+    .product-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .product-short {
+      margin-top: 0.25rem;
+      font-size: .85rem;
+      color: #cbd5f5;
+    }
+
+    .product-price {
+      margin-top: .35rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #4ade80;
+    }
+
+    /* Allgemeiner WhatsApp-Bereich */
+    .contact-section {
+      margin-top: 0.3rem;
+      margin-bottom: 1.8rem;
+      padding: 1rem 1rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: rgba(15,23,42,0.95);
+    }
+
+    .contact-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+
+    .contact-text {
+      font-size: 0.85rem;
+      color: #d1d5db;
+      margin-bottom: 0.7rem;
+    }
+
+    .detail-section {
+      display: none;
+      margin-top: 1.2rem;
+      padding: 1rem;
+      border-radius: 0.95rem;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: radial-gradient(circle at top, rgba(34,197,94,0.08), transparent 55%),
+                  rgba(15,23,42,0.96);
+    }
+
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.8rem;
+      gap: 0.7rem;
+    }
+
+    .detail-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .detail-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #4ade80;
+      white-space: nowrap;
+    }
+
+    .detail-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .detail-images-main {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border-radius: 0.9rem;
+      border: 1px solid #4b5563;
+      max-height: 420px;
+    }
+
+    .detail-thumbs {
+      display: flex;
+      gap: .45rem;
+      overflow-x: auto;
+      margin-top: .45rem;
+      padding-bottom: 0.15rem;
+    }
+
+    .detail-thumbs img {
+      width: 95px;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border-radius: .45rem;
+      border: 1px solid #4b5563;
+      opacity: .8;
+      cursor: pointer;
+      transition: .12s;
+      flex-shrink: 0;
+    }
+
+    .detail-thumbs img:hover,
+    .detail-thumbs img.active-thumb {
+      opacity: 1;
+      border-color: #22c55e;
+      transform: translateY(-2px);
+    }
+
+    .detail-description {
+      color: #e5e7eb;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    .variant-box {
+      margin-bottom: 0.9rem;
+      padding: 0.7rem 0.8rem;
+      border-radius: 0.7rem;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.95);
+    }
+
+    .variant-row {
+      margin-bottom: 0.5rem;
+    }
+
+    .variant-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .variant-label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 0.15rem;
+      color: #e5e7eb;
+    }
+
+    .variant-select {
+      width: 100%;
+      padding: 0.4rem 0.5rem;
+      border-radius: 0.4rem;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 0.9rem;
+    }
+
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      padding: .8rem 1.2rem;
+      background: #22c55e;
+      color: #052e16;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(22,163,74,0.5);
+      transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(22,163,74,0.55);
+      opacity: 0.97;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2.2rem;
+      color: #9ca3af;
+      padding: 1.6rem 0 2rem;
+      font-size: 0.8rem;
+    }
+
+    /* --- MOBILE / iPHONE OPTIMIERUNG --- */
+    @media (max-width: 768px) {
+      header {
+        padding: 0.7rem 0.9rem;
+      }
+
+      .logo-wrap img {
+        height: 34px;
+      }
+
+      main {
+        padding: 0.9rem;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+      }
+
+      p.lead {
+        font-size: 0.86rem;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr;
+        gap: 0.95rem;
+      }
+
+      .product-main-img {
+        max-height: 310px;
+      }
+
+      .detail-section {
+        padding: 0.9rem;
+        margin-top: 1rem;
+      }
+
+      .detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .detail-title {
+        font-size: 1.2rem;
+      }
+
+      .detail-price {
+        font-size: 1rem;
+      }
+
+      .detail-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .detail-images-main {
+        max-height: 360px;
+      }
+
+      .detail-thumbs img {
+        width: 80px;
+      }
+
+      .btn-whatsapp {
+        width: 100%;
+      }
+
+      .contact-section {
+        padding: 0.9rem;
+      }
+    }
+
+    @media (max-width: 430px) {
+      header {
+        padding: 0.7rem 0.75rem;
+      }
+
+      main {
+        padding: 0.8rem;
+      }
+
+      .product-body {
+        padding: 0.75rem 0.8rem 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-top">
+      <div class="logo-wrap">
+        <img src="logo.png" alt="Waellershop Logo">
+      </div>
+    </div>
+    <div class="subtitle">Direkt per WhatsApp bestellen</div>
+  </div>
+</header>
+
+<main>
+  <h1>Produkte</h1>
+  <p class="lead">Tippe auf ein Produkt für Details, Bilder & Varianten. Bestellen kannst du direkt per WhatsApp.</p>
+
+  <div id="product-grid" class="product-grid"></div>
+
+  <!-- Allgemeine Anfrage / Sonderwünsche -->
+  <section class="contact-section">
+    <div class="contact-title">Andere Wünsche oder Fragen?</div>
+    <p class="contact-text">
+      Du suchst eine andere Marke, ein spezielles Modell oder hast eine allgemeine Frage?
+      Schreib mir einfach direkt über WhatsApp – ich antworte dir so schnell wie möglich.
+    </p>
+    <button id="general-whatsapp" class="btn-whatsapp">
+      💬 Allgemeine Anfrage per WhatsApp
+    </button>
+  </section>
+
+  <section id="detail-section" class="detail-section">
+    <div class="detail-header">
+      <div id="detail-title" class="detail-title"></div>
+      <div id="detail-price" class="detail-price"></div>
+    </div>
+
+    <div class="detail-layout">
+      <div>
+        <img id="detail-main-img" class="detail-images-main" src="" alt="">
+        <div id="detail-thumbs" class="detail-thumbs"></div>
+      </div>
+
+      <div>
+        <p id="detail-description" class="detail-description"></p>
+
+        <div class="variant-box">
+          <div id="variant-color-row" class="variant-row" style="display:none;">
+            <label for="variant-color" class="variant-label">Farbe auswählen</label>
+            <select id="variant-color" class="variant-select"></select>
+          </div>
+          <div id="variant-size-row" class="variant-row" style="display:none;">
+            <label for="variant-size" class="variant-label">Größe auswählen</label>
+            <select id="variant-size" class="variant-select"></select>
+          </div>
+        </div>
+
+        <button id="detail-whatsapp" class="btn-whatsapp">
+          💬 Über WhatsApp zu diesem Produkt
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> Wäller Shop – Alle Rechte vorbehalten.
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const WHATSAPP = "4915151888828";
+
+const products = [
+  {
+    id: 1,
+    name: "Stone Island Half Zip Sweater",
+    short: "Farben: Schwarz, Hellgrau, Dunkelgrau, Beige | Größen: S–XL",
+    description:
+      "Stone Island Half Zip Sweater in vier Farben: Schwarz, Hellgrau, Dunkelgrau und Beige. Größen: S–XL. Top Qualität, klassisches Design.",
+    price: "50,00 €",
+    images: [
+      "bilder/artikel1-1.jpg",
+      "bilder/artikel1-2.jpg",
+      "bilder/artikel1-3.jpg",
+      "bilder/artikel1-4.jpg",
+      "bilder/artikel1-5.jpg"
+    ],
+    variants: {
+      colors: ["Schwarz", "Hellgrau", "Dunkelgrau", "Beige"],
+      sizes: ["S", "M", "L", "XL"]
+    }
+  },
+  {
+    id: 2,
+    name: "The North Face Puffer Jacket",
+    short: "Farbe: Schwarz | Größen: S–XL",
+    description:
+      "North Face Puffer Jacket in klassischem Schwarz. Größen S bis XL. Warm, bequem und perfekt für Herbst & Winter.",
+    price: "80,00 €",
+    images: [
+      "bilder/artikel2-1.jpg",
+      "bilder/artikel2-2.jpg",
+      "bilder/artikel2-3.jpg",
+ 
+    ],
+    variants: {
+      colors: ["Schwarz"],
+      sizes: ["S", "M", "L", "XL"]
+    }
+  },
+  {
+    id: 3,
+    name: "Fred Perry Half Zip Sweater",
+    short: "Farben: Schwarz & Grau | Größen: S–XL",
+    description:
+      "Fred Perry Half Zip Sweater in Schwarz und Grau. Größen S–XL. Premium Baumwolle und stilvoller Look.",
+    price: "45,00 €",
+    images: [
+      "bilder/artikel3-1.jpg",
+      "bilder/artikel3-2.jpg",
+    ],
+    variants: {
+      colors: ["Schwarz", "Grau"],
+      sizes: ["S", "M", "L", "XL"]
+    }
+  },
+  {
+    id: 4,
+    name: "Nike Air Force 1",
+    short: "Größen: 39–45 | Preis: 45 €",
+    description:
+      "Nike Air Force 1 in den Größen 39–45. Klassischer Sneaker, zeitlos und vielseitig kombinierbar.",
+    price: "45,00 €",
+    images: [
+      "bilder/artikel4-1.jpg",
+ 
+    ],
+    variants: {
+      colors: [],
+      sizes: ["39", "40", "41", "42", "43", "44", "45"]
+    }
+  }
+];
+
+let currentProductIndex = 0;
+
+function renderProductGrid() {
+  const grid = document.getElementById("product-grid");
+  grid.innerHTML = "";
+  products.forEach(function (p, i) {
+    const card = document.createElement("article");
+    card.className = "product-card";
+    card.onclick = function () { showDetail(i); };
+    card.innerHTML =
+      '<img src="' + p.images[0] + '" class="product-main-img" alt="' + p.name + '">' +
+      '<div class="product-body">' +
+      '<div class="product-title">' + p.name + '</div>' +
+      '<div class="product-short">' + p.short + '</div>' +
+      '<div class="product-price">' + p.price + '</div>' +
+      '</div>';
+    grid.appendChild(card);
+  });
+}
+
+function fillSelect(selectElement, options) {
+  selectElement.innerHTML = "";
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "Bitte wählen";
+  selectElement.appendChild(placeholder);
+
+  options.forEach(function (opt) {
+    const o = document.createElement("option");
+    o.value = opt;
+    o.textContent = opt;
+    selectElement.appendChild(o);
+  });
+}
+
+function showDetail(i) {
+  currentProductIndex = i;
+  const p = products[i];
+  const sec = document.getElementById("detail-section");
+  sec.style.display = "block";
+
+  document.getElementById("detail-title").textContent = p.name;
+  document.getElementById("detail-price").textContent = p.price;
+  document.getElementById("detail-description").textContent = p.description;
+
+  const main = document.getElementById("detail-main-img");
+  main.src = p.images[0];
+
+  const thumbs = document.getElementById("detail-thumbs");
+  thumbs.innerHTML = "";
+  p.images.forEach(function (src, idx) {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = p.name + " Bild " + (idx + 1);
+    if (idx === 0) img.classList.add("active-thumb");
+    img.onclick = function () {
+      main.src = src;
+      document.querySelectorAll("#detail-thumbs img").forEach(function (x) {
+        x.classList.remove("active-thumb");
+      });
+      img.classList.add("active-thumb");
+    };
+    thumbs.appendChild(img);
+  });
+
+  const colorRow = document.getElementById("variant-color-row");
+  const sizeRow = document.getElementById("variant-size-row");
+  const colorSelect = document.getElementById("variant-color");
+  const sizeSelect = document.getElementById("variant-size");
+
+  if (p.variants && p.variants.colors && p.variants.colors.length > 0) {
+    colorRow.style.display = "block";
+    fillSelect(colorSelect, p.variants.colors);
+  } else {
+    colorRow.style.display = "none";
+    colorSelect.innerHTML = "";
+  }
+
+  if (p.variants && p.variants.sizes && p.variants.sizes.length > 0) {
+    sizeRow.style.display = "block";
+    fillSelect(sizeSelect, p.variants.sizes);
+  } else {
+    sizeRow.style.display = "none";
+    sizeSelect.innerHTML = "";
+  }
+
+  sec.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function buildWhatsAppLinkForCurrent() {
+  const p = products[currentProductIndex];
+  const colorSelect = document.getElementById("variant-color");
+  const sizeSelect = document.getElementById("variant-size");
+
+  const color = colorSelect && colorSelect.value ? colorSelect.value : "";
+  const size = sizeSelect && sizeSelect.value ? sizeSelect.value : "";
+
+  let text = "Hallo, ich interessiere mich für: " + p.name;
+  if (color) text += " | Farbe: " + color;
+  if (size) text += " | Größe: " + size;
+  text += ".";
+
+  return "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(text);
+}
+
+document.getElementById("detail-whatsapp").addEventListener("click", function (e) {
+  e.preventDefault();
+  const link = buildWhatsAppLinkForCurrent();
+  window.open(link, "_blank");
+});
+
+const generalBtn = document.getElementById("general-whatsapp");
+if (generalBtn) {
+  generalBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    const text = "Hallo, ich habe eine allgemeine Frage oder einen besonderen Wunsch zu deinen Produkten.";
+    const link = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(text);
+    window.open(link, "_blank");
+  });
+}
+
+renderProductGrid();
+// WICHTIG: wir öffnen KEIN Detail automatisch mehr
+</script>
+
+</body>
+</html>
+
+
+
