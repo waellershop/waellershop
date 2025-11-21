@@ -88,6 +88,7 @@
       width: 100%;
       aspect-ratio: 1179 / 1542;
       object-fit: cover;
+      display: block;
     }
 
     .product-body {
@@ -144,6 +145,7 @@
       display: grid;
       grid-template-columns: 1.4fr 1fr;
       gap: 1.5rem;
+      align-items: flex-start;
     }
 
     .detail-images-main {
@@ -152,6 +154,7 @@
       object-fit: cover;
       border-radius: 1rem;
       border: 1px solid #555;
+      max-height: 70vh; /* damit auf Smartphones nicht zu hoch */
     }
 
     .detail-thumbs {
@@ -162,7 +165,7 @@
     }
 
     .detail-thumbs img {
-      width: 120px;
+      width: 110px;
       aspect-ratio: 1179 / 1542;
       object-fit: cover;
       border-radius: .5rem;
@@ -170,6 +173,7 @@
       opacity: .8;
       cursor: pointer;
       transition: .15s;
+      flex-shrink: 0;
     }
 
     .detail-thumbs img:hover,
@@ -221,6 +225,7 @@
     .btn-whatsapp {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: .4rem;
       padding: .8rem 1.2rem;
       background: #22c55e;
@@ -231,11 +236,12 @@
       transition: .15s;
       border: none;
       cursor: pointer;
+      box-shadow: 0 10px 25px rgba(22,163,74,0.5);
     }
 
     .btn-whatsapp:hover {
       transform: translateY(-2px);
-      box-shadow: 0 15px 35px rgba(22,163,74,0.5);
+      box-shadow: 0 15px 35px rgba(22,163,74,0.6);
     }
 
     footer {
@@ -243,12 +249,85 @@
       margin-top: 3rem;
       color: #9ca3af;
       padding: 2rem 0;
+      font-size: 0.85rem;
     }
 
-    @media(max-width: 800px){
-      .detail-layout { grid-template-columns: 1fr; }
-      .detail-header { flex-direction: column; align-items: flex-start; }
-      .detail-price { font-size: 1.1rem; }
+    /* --- MOBILE-OPTIMIERUNG --- */
+    @media (max-width: 768px) {
+      header {
+        padding: 0.9rem 1rem;
+      }
+
+      main {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 1.3rem;
+      }
+
+      .brand {
+        font-size: 1.2rem;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr; /* 1 Spalte auf Handy */
+        gap: 1rem;
+      }
+
+      .product-card {
+        border-radius: 0.8rem;
+      }
+
+      .detail-section {
+        padding: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .detail-title {
+        font-size: 1.3rem;
+      }
+
+      .detail-price {
+        font-size: 1.1rem;
+      }
+
+      .detail-layout {
+        grid-template-columns: 1fr; /* Detailbereich untereinander */
+        gap: 1rem;
+      }
+
+      .detail-images-main {
+        max-height: 65vh;
+      }
+
+      .btn-whatsapp {
+        width: 100%;          /* voller Screen auf Handy */
+        padding: 0.9rem 1.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 15px;
+      }
+
+      .product-body {
+        padding: 0.8rem;
+      }
+
+      .detail-section {
+        padding: 0.9rem;
+      }
+
+      .detail-thumbs img {
+        width: 90px;
+      }
     }
   </style>
 </head>
@@ -317,7 +396,7 @@ const products = [
     short: "Farben: Schwarz, Hellgrau, Dunkelgrau, Beige | Größen: S–XL",
     description:
       "Stone Island Half Zip Sweater in vier Farben: Schwarz, Hellgrau, Dunkelgrau und Beige. Größen: S–XL. Top Qualität, klassisches Design.",
-    price: "45,00 €",
+    price: "79,99 €",
     images: [
       "bilder/artikel1-1.jpg",
       "bilder/artikel1-2.jpg",
@@ -336,11 +415,13 @@ const products = [
     short: "Farbe: Schwarz | Größen: S–XL",
     description:
       "North Face Puffer Jacket in klassischem Schwarz. Größen S bis XL. Warm, bequem und perfekt für Herbst & Winter.",
-    price: "80,00 €",
+    price: "99,99 €",
     images: [
       "bilder/artikel2-1.jpg",
       "bilder/artikel2-2.jpg",
       "bilder/artikel2-3.jpg",
+      "bilder/artikel2-4.jpg",
+      "bilder/artikel2-5.jpg",
     ],
     variants: {
       colors: ["Schwarz"],
@@ -353,11 +434,13 @@ const products = [
     short: "Farben: Schwarz & Grau | Größen: S–XL",
     description:
       "Fred Perry Half Zip Sweater in Schwarz und Grau. Größen S–XL. Premium Baumwolle und stilvoller Look.",
-    price: "45,00 €",
+    price: "69,99 €",
     images: [
       "bilder/artikel3-1.jpg",
       "bilder/artikel3-2.jpg",
-
+      "bilder/artikel3-3.jpg",
+      "bilder/artikel3-4.jpg",
+      "bilder/artikel3-5.jpg",
     ],
     variants: {
       colors: ["Schwarz", "Grau"],
@@ -373,9 +456,13 @@ const products = [
     price: "45,00 €",
     images: [
       "bilder/artikel4-1.jpg",
+      "bilder/artikel4-2.jpg",
+      "bilder/artikel4-3.jpg",
+      "bilder/artikel4-4.jpg",
+      "bilder/artikel4-5.jpg",
     ],
     variants: {
-      colors: [], // ggf. später z.B. ["Weiß"] eintragen
+      colors: [],
       sizes: ["39", "40", "41", "42", "43", "44", "45"]
     }
   }
@@ -444,7 +531,6 @@ function showDetail(i) {
     thumbs.appendChild(img);
   });
 
-  // Varianten
   const colorRow = document.getElementById("variant-color-row");
   const sizeRow = document.getElementById("variant-size-row");
   const colorSelect = document.getElementById("variant-color");
@@ -499,5 +585,6 @@ if (products.length > 0) {
 
 </body>
 </html>
+
 
 
