@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Wäller Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #020617;
+      color: #e5e7eb;
+      line-height: 1.5;
+    }
+
+    header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.95);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-top: 0.2rem;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p.lead {
+      color: #cbd5f5;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .product-card {
+      background: #020617;
+      border-radius: 1rem;
+      border: 1px solid rgba(148,163,184,0.4);
+      cursor: pointer;
+      overflow: hidden;
+      transition: .2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: #22c55e;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    }
+
+    .product-main-img {
+      width: 100%;
+      aspect-ratio: 1179 / 1542;
+      object-fit: cover;
+    }
+
+    .product-body {
+      padding: 1rem;
+    }
+
+    .product-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .product-short {
+      margin-top: 0.3rem;
+      font-size: .9rem;
+      color: #cbd5f5;
+    }
+
+    .product-price {
+      margin-top: .4rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #4ade80;
+    }
+
+    .detail-section {
+      display: none;
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(148,163,184,0.3);
+      background: rgba(15,23,42,0.9);
+    }
+
+    .detail-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .detail-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .detail-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #4ade80;
+      white-space: nowrap;
+    }
+
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .detail-images-main {
+      width: 100%;
+      aspect-ratio: 1179 / 1542;
+      object-fit: cover;
+      border-radius: 1rem;
+      border: 1px solid #555;
+    }
+
+    .detail-thumbs {
+      display: flex;
+      gap: .5rem;
+      overflow-x: auto;
+      margin-top: .5rem;
+    }
+
+    .detail-thumbs img {
+      width: 120px;
+      aspect-ratio: 1179 / 1542;
+      object-fit: cover;
+      border-radius: .5rem;
+      border: 1px solid #555;
+      opacity: .8;
+      cursor: pointer;
+      transition: .15s;
+    }
+
+    .detail-thumbs img:hover,
+    .detail-thumbs img.active-thumb {
+      opacity: 1;
+      border-color: #22c55e;
+      transform: translateY(-2px);
+    }
+
+    .detail-description {
+      color: #d1d5db;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .variant-box {
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+      border-radius: 0.7rem;
+      border: 1px solid rgba(148,163,184,0.4);
+      background: rgba(15,23,42,0.9);
+    }
+
+    .variant-row {
+      margin-bottom: 0.6rem;
+    }
+
+    .variant-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .variant-label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 0.2rem;
+      color: #e5e7eb;
+    }
+
+    .variant-select {
+      width: 100%;
+      padding: 0.4rem 0.5rem;
+      border-radius: 0.4rem;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 0.9rem;
+    }
+
+    .btn-whatsapp {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .8rem 1.2rem;
+      background: #22c55e;
+      color: #052e16;
+      border-radius: 999px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: .15s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(22,163,74,0.5);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      color: #9ca3af;
+      padding: 2rem 0;
+    }
+
+    @media(max-width: 800px){
+      .detail-layout { grid-template-columns: 1fr; }
+      .detail-header { flex-direction: column; align-items: flex-start; }
+      .detail-price { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="brand">Wäller Shop</div>
+    <div class="subtitle">Direkt per WhatsApp bestellen</div>
+  </div>
+</header>
+
+<main>
+  <h1>Produkte</h1>
+  <p class="lead">Klicke auf ein Produkt für Details, Bilder & Varianten-Auswahl. Bestellen kannst du direkt per WhatsApp.</p>
+
+  <div id="product-grid" class="product-grid"></div>
+
+  <section id="detail-section" class="detail-section">
+    <div class="detail-header">
+      <div id="detail-title" class="detail-title"></div>
+      <div id="detail-price" class="detail-price"></div>
+    </div>
+
+    <div class="detail-layout">
+      <div>
+        <img id="detail-main-img" class="detail-images-main" src="" alt="">
+        <div id="detail-thumbs" class="detail-thumbs"></div>
+      </div>
+
+      <div>
+        <p id="detail-description" class="detail-description"></p>
+
+        <div class="variant-box">
+          <div id="variant-color-row" class="variant-row" style="display:none;">
+            <label for="variant-color" class="variant-label">Farbe auswählen</label>
+            <select id="variant-color" class="variant-select"></select>
+          </div>
+          <div id="variant-size-row" class="variant-row" style="display:none;">
+            <label for="variant-size" class="variant-label">Größe auswählen</label>
+            <select id="variant-size" class="variant-select"></select>
+          </div>
+        </div>
+
+        <button id="detail-whatsapp" class="btn-whatsapp">
+          💬 Über WhatsApp anfragen
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="year"></span> Wäller Shop – Alle Rechte vorbehalten.
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const WHATSAPP = "4915151888828";
+
+const products = [
+  {
+    id: 1,
+    name: "Stone Island Half Zip Sweater",
+    short: "Farben: Schwarz, Hellgrau, Dunkelgrau, Beige | Größen: S–XL",
+    description:
+      "Stone Island Half Zip Sweater in vier Farben: Schwarz, Hellgrau, Dunkelgrau und Beige. Größen: S–XL. Top Qualität, klassisches Design.",
+    price: "45,00 €",
+    images: [
+      "bilder/artikel1-1.jpg",
+      "bilder/artikel1-2.jpg",
+      "bilder/artikel1-3.jpg",
+      "bilder/artikel1-4.jpg",
+      "bilder/artikel1-5.jpg",
+    ],
+    variants: {
+      colors: ["Schwarz", "Hellgrau", "Dunkelgrau", "Beige"],
+      sizes: ["S", "M", "L", "XL"]
+    }
+  },
+  {
+    id: 2,
+    name: "The North Face Puffer Jacket",
+    short: "Farbe: Schwarz | Größen: S–XL",
+    description:
+      "North Face Puffer Jacket in klassischem Schwarz. Größen S bis XL. Warm, bequem und perfekt für Herbst & Winter.",
+    price: "80,00 €",
+    images: [
+      "bilder/artikel2-1.jpg",
+      "bilder/artikel2-2.jpg",
+      "bilder/artikel2-3.jpg",
+    ],
+    variants: {
+      colors: ["Schwarz"],
+      sizes: ["S", "M", "L", "XL"]
+    }
+  },
+  {
+    id: 3,
+    name: "Fred Perry Half Zip Sweater",
+    short: "Farben: Schwarz & Grau | Größen: S–XL",
+    description:
+      "Fred Perry Half Zip Sweater in Schwarz und Grau. Größen S–XL. Premium Baumwolle und stilvoller Look.",
+    price: "45,00 €",
+    images: [
+      "bilder/artikel3-1.jpg",
+      "bilder/artikel3-2.jpg",
+
+    ],
+    variants: {
+      colors: ["Schwarz", "Grau"],
+      sizes: ["S", "M", "L", "XL"]
+    }
+  },
+  {
+    id: 4,
+    name: "Nike Air Force 1",
+    short: "Größen: 39–45 | Preis: 45 €",
+    description:
+      "Nike Air Force 1 in den Größen 39–45. Klassischer Sneaker, zeitlos und vielseitig kombinierbar.",
+    price: "45,00 €",
+    images: [
+      "bilder/artikel4-1.jpg",
+    ],
+    variants: {
+      colors: [], // ggf. später z.B. ["Weiß"] eintragen
+      sizes: ["39", "40", "41", "42", "43", "44", "45"]
+    }
+  }
+];
+
+let currentProductIndex = 0;
+
+function renderProductGrid() {
+  const grid = document.getElementById("product-grid");
+  grid.innerHTML = "";
+  products.forEach((p, i) => {
+    const card = document.createElement("article");
+    card.className = "product-card";
+    card.onclick = () => showDetail(i);
+    card.innerHTML = `
+      <img src="${p.images[0]}" class="product-main-img" alt="${p.name}">
+      <div class="product-body">
+        <div class="product-title">${p.name}</div>
+        <div class="product-short">${p.short}</div>
+        <div class="product-price">${p.price}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function fillSelect(selectElement, options) {
+  selectElement.innerHTML = "";
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "Bitte wählen";
+  selectElement.appendChild(placeholder);
+
+  options.forEach(opt => {
+    const o = document.createElement("option");
+    o.value = opt;
+    o.textContent = opt;
+    selectElement.appendChild(o);
+  });
+}
+
+function showDetail(i) {
+  currentProductIndex = i;
+  const p = products[i];
+  const sec = document.getElementById("detail-section");
+  sec.style.display = "block";
+
+  document.getElementById("detail-title").textContent = p.name;
+  document.getElementById("detail-price").textContent = p.price;
+  document.getElementById("detail-description").textContent = p.description;
+
+  const main = document.getElementById("detail-main-img");
+  main.src = p.images[0];
+
+  const thumbs = document.getElementById("detail-thumbs");
+  thumbs.innerHTML = "";
+  p.images.forEach((src, idx) => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = p.name + " Bild " + (idx + 1);
+    if (idx === 0) img.classList.add("active-thumb");
+    img.onclick = () => {
+      main.src = src;
+      document.querySelectorAll("#detail-thumbs img").forEach(x => x.classList.remove("active-thumb"));
+      img.classList.add("active-thumb");
+    };
+    thumbs.appendChild(img);
+  });
+
+  // Varianten
+  const colorRow = document.getElementById("variant-color-row");
+  const sizeRow = document.getElementById("variant-size-row");
+  const colorSelect = document.getElementById("variant-color");
+  const sizeSelect = document.getElementById("variant-size");
+
+  if (p.variants && p.variants.colors && p.variants.colors.length > 0) {
+    colorRow.style.display = "block";
+    fillSelect(colorSelect, p.variants.colors);
+  } else {
+    colorRow.style.display = "none";
+    colorSelect.innerHTML = "";
+  }
+
+  if (p.variants && p.variants.sizes && p.variants.sizes.length > 0) {
+    sizeRow.style.display = "block";
+    fillSelect(sizeSelect, p.variants.sizes);
+  } else {
+    sizeRow.style.display = "none";
+    sizeSelect.innerHTML = "";
+  }
+
+  sec.scrollIntoView({behavior:"smooth"});
+}
+
+function buildWhatsAppLinkForCurrent() {
+  const p = products[currentProductIndex];
+  const colorSelect = document.getElementById("variant-color");
+  const sizeSelect = document.getElementById("variant-size");
+
+  const color = colorSelect && colorSelect.value ? colorSelect.value : "";
+  const size = sizeSelect && sizeSelect.value ? sizeSelect.value : "";
+
+  let text = `Hallo, ich interessiere mich für: ${p.name}`;
+  if (color) text += ` | Farbe: ${color}`;
+  if (size) text += ` | Größe: ${size}`;
+  text += ".";
+
+  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
+}
+
+document.getElementById("detail-whatsapp").addEventListener("click", function(e) {
+  e.preventDefault();
+  const link = buildWhatsAppLinkForCurrent();
+  window.open(link, "_blank");
+});
+
+renderProductGrid();
+if (products.length > 0) {
+  showDetail(0);
+}
+</script>
+
+</body>
+</html>
+
+
